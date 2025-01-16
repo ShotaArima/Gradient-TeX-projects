@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
     texlive-full \
     texlive-lang-japanese \
     texlive-lang-cjk \
-    xdvik-ja \
-    dvipsk-ja \
+    texlive-extra-utils \
     latexmk \
     gzip \
     zip \
