@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  texlive:
+    build: .
+    container_name: texlive-jp
+    volumes:
+      - ./tex:/work/tex
+      - ./output:/work/output
+    working_dir: /work
+    # インタラクティブモードを維持
+    tty: true
+    stdin_open: true
+    # 環境変数の設定
+    environment:
+      - LANG=ja_JP.UTF-8
