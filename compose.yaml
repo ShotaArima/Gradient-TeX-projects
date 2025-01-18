@@ -5,8 +5,7 @@ services:
     build: .
     container_name: texlive-jp
     volumes:
-      - ./tex:/work/tex
-      - ./output:/work/output
+      - ./:/work
     working_dir: /work
     # インタラクティブモードを維持
     tty: true
