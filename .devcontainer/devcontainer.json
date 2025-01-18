@@ -1,6 +1,10 @@
 {
     "name": "TeX Live",
-    "image": "ghcr.io/satackey/texlive:debian",
+    "dockerComposeFile": [
+		"../compose.yaml"
+	],
+    "service": "texlive",
+    "workspaceFolder": "/work",
     "customizations": {
         "vscode": {
             "settings": { 
