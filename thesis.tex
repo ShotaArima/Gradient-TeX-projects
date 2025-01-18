@@ -1,0 +1,181 @@
+\documentclass[12pt,uplatex]{jsarticle}   % 日本語
+\usepackage{tcu-thesis}
+\usepackage{fancyhdr}
+
+% オリジナルマクロ by Kyohei Fushida and Kenji Fujiwara
+\newcommand{\li}{\item}
+\newcommand{\ol}[1]{\begin{enumerate}#1\end{enumerate}}
+\newcommand{\ul}[1]{\begin{itemize}#1\end{itemize}}
+\newcommand{\dl}[1]{\begin{description}#1\end{description}}
+\newcommand{\equ}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\eqenum}[1]{\begin{align}#1\end{align}}
+\newcommand{\eqa}[1]{\begin{align}#1\end{align}}
+\newcommand{\eqmul}[1]{\begin{equation}\begin{split}#1\end{split}\end{equation}}
+\usepackage{xcolor}
+
+%\newcommand{\figref}[1]{図\ref{#1}}
+%\newcommand{\tabref}[1]{表\ref{#1}}
+\renewcommand{\subsecref}[1]{\ref{#1}項}
+\newcommand{\chapref}[1]{\ref{#1}章}
+
+\definecolor{darkgreen}{rgb}{0, 0.5, 0} %下の色指定で使う
+\definecolor{whitesmoke}{rgb}{0.99, 0.99, 0.99} %下の色指定で使う
+\newcommand{\red}{\color{red}}%red
+\newcommand{\blue}{\color{blue}}
+\newcommand{\green}{\color{teal}}
+\newcommand{\purple}{\color{violet}}%violet
+\newcommand{\black}{\color{black}}
+\newcommand{\ea}{\xspace\emph{et al.}\xspace}
+\newcommand{\TODO}[1]{\nb{TODO:}{#1}}
+
+
+\newcommand{\methods}{\#methods}
+\newcommand{\colorrow}{\rowcolor[rgb]{0.851,0.851,0.851}}
+\newcommand{\colorcel}{\cellcolor[rgb]{0.851,0.851,0.851}}
+\def\et{\xspace et\ al.\xspace}
+\def\ie{i.e.,\xspace}
+\def\eg{e.g.,\xspace}
+\newcommand{\nb}[2]{
+    \fcolorbox{gray}{yellow}{\bfseries\sffamily\scriptsize#1}
+    {\sf\small\textit{\textcolor{blue}{#2}}}
+   }
+
+\newtheorem{defi}{定義}
+\newtheorem{hypo}{仮説}
+
+% 必要なパッケージの読み込み
+% とりあえず最低限使っておいて欲しいパッケージのみ書いています．
+% 色々なパッケージがあります．藤原が過去に使ってたパッケージなどは博士論文のファイルを参照してください．
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{cite} % 参考文献を [3,4]のようにまとめるのに便利．
+\usepackage{url} % urlを記載するときに使う．
+
+% 参考文献を引用された順で出力する
+\bibliographystyle{junsrt}
+
+% 学籍番号
+\studentnumber{1261013}
+
+% 日本語題目
+\title{リファクタリングがソフトウェア品質に及ぼす影響の\\実証的評価に関する研究}
+
+% 英語題目
+\etitle{Methods for Empirical Analysis and Evaluation of Refactoring Instances}
+
+% 日本語氏名（姓と名の間に空白（半角）を入れて下さい）
+\author{藤原 賢二}
+
+% 欧文氏名（first name, last name の順に記入し、先頭文字のみを大文字にする。）
+\eauthor{Kenji Fujiwara}
+
+% 専攻
+\department{\media}
+\course{\jsys}
+
+% 論文提出年月日
+\syear{2024}
+\smonth{1}
+\sday{30}
+
+% キーワード５〜６個 (in LaTeX)
+\keywords{リファクタリング，リファクタリング検出，リポジトリマイニング，版管理システム，定量的評価}
+
+% 5 or 6 Keywords (in LaTeX)
+\ekeywords{Refactoring, Refactoring Detection, Mining Software Repositories, Version Control System, Quantitative Evaluation}
+
+% 内容梗概 (in LaTeX)
+%   Abstractは必須です。
+%   サンプルほど長々と書く必要はありません．
+%   注: 行の先頭が\\で始まらないようにすること。
+\abstract{%
+リファクタリングとは，ソフトウェアが抱える設計上の問題をソフトウェアの外部的な振る舞いを変更することなく取り除くことをいう．
+高品質なソフトウェアを効率良く開発するためには，適切な時期に適切な箇所に対してリファクタリングを実施することが重要である．
+本論文では，リファクタリングの実施がソフトウェア品質に与える影響を調査するための分析手法と，その支援手法の提案と評価を行った．
+
+初めに，リファクタリングと欠陥混入に着目し，これらの関係を調査するための分析手法を提案した．
+提案手法では，ソフトウェアの開発履歴からリファクタリングの実施時期，欠陥の混入時期および修正時期を特定する．
+そして，これらの時期から各活動の頻度を算出して分析者に提示する．
+提案手法をColumbaプロジェクトに適用した結果，提案手法を用いてリファクタリングと欠陥の関係を定量的に評価することが可能であることを確認した．
+一方で，数千や数万を超えるコミットから構成される開発履歴を対象に提案手法を適用するためには，リファクタリングの実施時期をより高速に特定する手法が必要であることが分かった．
+
+上記問題を解決するために，開発履歴からリファクタリングの実施履歴を高速に復元するための手法（リファクタリング検出手法）の提案と評価を実施した．
+従来の手法は，任意の2バージョン間から実施されたリファクタリングを検出することを目的としていた．
+そのため，開発履歴中の隣接する全てのバージョン間からリファクタリングを検出するための工夫がされていなかった．
+提案手法はリファクタリングの検出に必要な構文情報の解析を差分的に実施することで計算時間の短縮を実現する．
+メソッド抽出リファクタリングとメソッドの引き上げリファクタリングを対象に提案手法を実装し，従来手法と計算時間および検出精度の比較を行った．
+その結果，提案手法は従来手法と比較して，メソッド抽出リファクタリングについては約1.7倍多く，メソッドの引き上げリファクタリングについては従来手法では検出できなかったリファクタリングの履歴を正確かつ高速に検出することができた．
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% document starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%
+% 表紙 および アブストラクト
+%
+\titlepage
+\jabstractpage
+%
+% 目次
+%
+\tableofcontents
+\newpage
+
+% 以降本文
+\pagenumbering{arabic} % ページ番号をアラビア数字に戻す
+
+% この章構成はあくまで一例です．
+% \section:章
+% \subsection: 節
+% \subsubsection: 項
+% として使ってください．
+% 研究の内容によって自分が適切だと思う章構成を考えて下さい．
+% もちろん構成について藤原と相談するのも良いと思います．
+\section{はじめに}
+\input{contents/introduction}
+
+\section{関連研究・用語}
+\input{contents/background}
+
+\section{提案手法}
+\input{contents/method}
+
+\section{実験}
+\input{contents/experiment}
+
+\section{実験結果}
+\input{contents/result}
+
+\section{考察}
+\input{contents/discussion}
+
+\section{妥当性の脅威}
+\input{contents/threats_to_validity}
+
+\section{おわりに}
+\input{contents/conclusion}
+
+
+% 謝辞
+\acknowledgements
+% 謝辞の文面は過去の（豊田高専を含む）謝辞や，藤原の博士論文を参考にしてください．
+% 博士論文の謝辞は長大ですが，卒業研究論文の謝辞をそんなに長くする必要は全くないと思います．
+色々と感謝します．
+
+
+% 参考文献
+% BibTeX を使って参考文献のリストをつくって下さい．
+% proceedings.bib: 雑誌名や国際会議の名称をマクロ化しています
+% ref.bib: ここに参考文献を書くと良いと思います．元々博士論文に使った論文の情報が載っています．
+% ref.bib以外のファイルに分けることも可能です．単純にカンマで区切ってファイル名（.bib除く）を
+% \bibliographyの引数に追加してください．
+\bibliography{proceedings,ref}
+
+% 付録
+% 付録には，本文に直接載せるべきではない，文字通り付録となる要素を載せます．
+% 例えば，詳細な数式の展開であったり，アンケートや実験の詳細な（ほぼ完全な）結果だったりを載せます．
+% 必要であれば以下の3行のコメントアウトを外して付録を加えてください．
+%\appendix
+%\input{contents/appendix}
+
+\end{document}
+

@@ -1,0 +1,58 @@
+% サンプルです．全部削除してください．
+\section{構文情報を用いたリファクタリング検出手法の計算量}\label{appendix:computation}
+\subsection{$\delta_m = k e^{-\lambda x}$の場合}
+\begin{eqnarray*}
+	\widetilde{file}(R) &=& \sum_{r=0}^R \delta_m (r) \\
+	&=& \sum_{r=0}^R ke^{-\lambda r} \\
+	&=& k \frac{1 - e^{-\lambda (R+1)}}{1 - e^{- \lambda}} \\
+	\therefore \order(\widetilde{file}(R)) &=& \order(1)
+\end{eqnarray*}
+\subsection{$\delta_m = \alpha$の場合}
+\begin{eqnarray*}
+	\widetilde{file}(R) &=& \sum_{r=0}^R \delta_m (r) \\
+	&=& \sum_{r=0}^R \alpha \\
+	&=& \alpha (R + 1 ) \\
+	\therefore \order(\widetilde{file}(R)) &=& \order(R)
+\end{eqnarray*}
+
+\section{従来手法におけるリファクタリング検出の計算量}
+\subsection{$\delta_m = k e^{-\lambda x}, \eta_m = \beta$の場合}
+\begin{eqnarray*}
+	\sum_{r=0}^R file(r) &=& \sum_{r=0}^R \sum_{i=0}^r \delta_m(i) (1 - \eta_m(i)) \\
+	&=& \sum_{r=0}^R \sum_{i=0}^r k e^{-\lambda i} (1 - \beta) \\
+	&=& k (1 - \beta) \sum_{r=0}^R \sum_{i=0}^r e^{-\lambda i} \\
+	&=& k (1 - \beta) \sum_{r=0}^R \frac{1 - e^{-\lambda (r+1)}}{1 - e^{- \lambda}} \\ 
+	&=& \frac{k (1 - \beta)}{1 - e^{- \lambda}} \sum_{r=0}^R (1 - e^{-\lambda (r+1)}) \\ 
+	&=& \frac{k (1 - \beta)}{1 - e^{- \lambda}} (R+1 + e^{- \lambda} \frac{1 - e^{-\lambda (R+1)}}{1 - e^{- \lambda}}) \\ 
+	\therefore \order(\sum_{r=0}^R file(r)) &=& \order(R)
+\end{eqnarray*}
+
+
+\subsection{$\delta_m = k e^{-\lambda x}, \eta_m = 1 - l e^{-\gamma x}$の場合}
+\begin{eqnarray*}
+	\sum_{r=0}^R file(r) &=& \sum_{r=0}^R \sum_{i=0}^r \delta_m(i) (1 - \eta_m(i)) \\
+	&=& \sum_{r=0}^R \sum_{i=0}^r k e^{-\lambda i} \times l e ^{- \gamma i} \\
+	&=&  kl \sum_{r=0}^R \sum_{i=0}^r e^{-(\lambda + \gamma) i} \\
+	\therefore \order(\sum_{r=0}^R file(r)) &=& \order(R)
+\end{eqnarray*}
+
+
+\subsection{$\delta_m = \alpha, \eta_m = \beta$の場合}
+\begin{eqnarray*}
+	\sum_{r=0}^R file(r) &=& \sum_{r=0}^R \sum_{i=0}^r \delta_m(i) (1 - \eta_m(i)) \\
+	&=& \sum_{r=0}^R \sum_{i=0}^r \alpha (1 - \beta) \\
+	&=& \alpha (1 - \beta) \sum_{r=0}^R \sum_{i=0}^r 1 \\
+	&=& \alpha (1 - \beta) \sum_{r=0}^R (r+1) \\
+	&=& \alpha (1 - \beta) \frac{(R+1)(R+2)}{2} \\
+	&=& \frac{\alpha (1 - \beta)}{2} (R^2 + 2R + 2) \\
+	\therefore \order(\sum_{r=0}^R file(r)) &=& \order(R^2)
+\end{eqnarray*}
+
+
+\subsection{$\delta_m = \alpha, \eta_m = 1 - l e^{-\gamma x}$の場合}
+\begin{eqnarray*}
+	\sum_{r=0}^R file(r) &=& \sum_{r=0}^R \sum_{i=0}^r \delta_m(i) (1 - \eta_m(i)) \\
+	&=& \sum_{r=0}^R \sum_{i=0}^r \alpha l e^{-\gamma i} \\
+	&=&  \alpha l \sum_{r=0}^R \sum_{i=0}^r e^{-\gamma i} \\
+	\therefore \order(\sum_{r=0}^R file(r)) &=& \order(R)
+\end{eqnarray*}
