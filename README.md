@@ -4,20 +4,13 @@
 ├── Dockerfile
 ├── compose.yaml
 ├── contents/
+│   ├──01_introduction.tex : はじめに
+│   ├──02_previous.tex : 背景
+│   ├──03_propose.tex : 手法
+│   ├──04_experiment.tex : 実験
+│   ├──05_conclusion.tex : 結論
 │   ├──appendix.tex : 付録
-│   ├──background.tex : 背景
-│   ├──conclusion.tex : 結論
-│   ├──discussion.tex : 議論(考察)
-│   ├──experiment.tex : 実験
-│   ├──introduction.tex : はじめに
-│   ├──method.tex : 手法
-│   ├──result.tex : 結果
-│   ├──threats_to_validity.tex : 妥当性の脅威
-│   └── 
-├──  output/
-│     └── # 生成されたPDFなどの出力ファイル
-└──references.bib
-      └── # 参考文献のBibTexファイル(必要に応じて)
+└──latexmkrc : LaTeX環境やコンパイルなどの設定ファイル
 ```
 
 # 実行
