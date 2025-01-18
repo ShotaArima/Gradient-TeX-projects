@@ -3,12 +3,14 @@
 .
 ├── Dockerfile
 ├── compose.yaml
-├── tex/
-│   └── # TeXファイルを配置するディレクトリ
-├──  output/
-│     └── # 生成されたPDFなどの出力ファイル
-└──references.bib
-      └── # 参考文献のBibTexファイル(必要に応じて)
+├── contents/
+│   ├──01_introduction.tex : はじめに
+│   ├──02_previous.tex : 背景
+│   ├──03_propose.tex : 手法
+│   ├──04_experiment.tex : 実験
+│   ├──05_conclusion.tex : 結論
+│   ├──appendix.tex : 付録
+└──latexmkrc : LaTeX環境やコンパイルなどの設定ファイル
 ```
 
 # 実行
@@ -20,3 +22,9 @@ docker compose run --rm texlive bash
 ## PDFの生成
 - 開発コンテナに入る
 - `thesis.tex`で`⌘+S`し、保存する
+```
+
+# 環境について
+- Ubuntu 22.04 
+- [TeX Live](https://texwiki.texjp.org/?Linux%2FLinux%20Mint#texlive)を参考にLinuxコンテナ上でTeXを使用する環境を用意
+- `.devcontainer`を使用し、cmd+sで自動的にpdfを生成する

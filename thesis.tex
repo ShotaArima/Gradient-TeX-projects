@@ -54,56 +54,44 @@
 \bibliographystyle{junsrt}
 
 % 学籍番号
-\studentnumber{1261013}
+\studentnumber{2172010}
 
 % 日本語題目
-\title{リファクタリングがソフトウェア品質に及ぼす影響の\\実証的評価に関する研究}
+\title{入力データの構造を考慮したLowProFoolアルゴリズム\\による敵対的サンプルの生成に関する研究}
 
 % 英語題目
-\etitle{Methods for Empirical Analysis and Evaluation of Refactoring Instances}
+\etitle{Generation of Adversarial Samples Using Modified LowProFool Algorithm with Consideration of Input Data Structure}
 
 % 日本語氏名（姓と名の間に空白（半角）を入れて下さい）
-\author{藤原 賢二}
+\author{有馬 祥太}
 
 % 欧文氏名（first name, last name の順に記入し、先頭文字のみを大文字にする。）
-\eauthor{Kenji Fujiwara}
+\eauthor{Shota Arima}
 
 % 専攻
 \department{\media}
 \course{\jsys}
 
 % 論文提出年月日
-\syear{2024}
+\syear{2025}
 \smonth{1}
 \sday{30}
 
 % キーワード５〜６個 (in LaTeX)
-\keywords{リファクタリング，リファクタリング検出，リポジトリマイニング，版管理システム，定量的評価}
+\keywords{敵対的サンプル，表形式データ，LowProFoolアルゴリズム，データ離散化，特徴量重要度}
 
 % 5 or 6 Keywords (in LaTeX)
-\ekeywords{Refactoring, Refactoring Detection, Mining Software Repositories, Version Control System, Quantitative Evaluation}
+\ekeywords{Adversarial Samples, Table Data, LowProFool Algorithm, Data discretization, Importance of Features}
 
 % 内容梗概 (in LaTeX)
 %   Abstractは必須です。
 %   サンプルほど長々と書く必要はありません．
 %   注: 行の先頭が\\で始まらないようにすること。
 \abstract{%
-リファクタリングとは，ソフトウェアが抱える設計上の問題をソフトウェアの外部的な振る舞いを変更することなく取り除くことをいう．
-高品質なソフトウェアを効率良く開発するためには，適切な時期に適切な箇所に対してリファクタリングを実施することが重要である．
-本論文では，リファクタリングの実施がソフトウェア品質に与える影響を調査するための分析手法と，その支援手法の提案と評価を行った．
-
-初めに，リファクタリングと欠陥混入に着目し，これらの関係を調査するための分析手法を提案した．
-提案手法では，ソフトウェアの開発履歴からリファクタリングの実施時期，欠陥の混入時期および修正時期を特定する．
-そして，これらの時期から各活動の頻度を算出して分析者に提示する．
-提案手法をColumbaプロジェクトに適用した結果，提案手法を用いてリファクタリングと欠陥の関係を定量的に評価することが可能であることを確認した．
-一方で，数千や数万を超えるコミットから構成される開発履歴を対象に提案手法を適用するためには，リファクタリングの実施時期をより高速に特定する手法が必要であることが分かった．
-
-上記問題を解決するために，開発履歴からリファクタリングの実施履歴を高速に復元するための手法（リファクタリング検出手法）の提案と評価を実施した．
-従来の手法は，任意の2バージョン間から実施されたリファクタリングを検出することを目的としていた．
-そのため，開発履歴中の隣接する全てのバージョン間からリファクタリングを検出するための工夫がされていなかった．
-提案手法はリファクタリングの検出に必要な構文情報の解析を差分的に実施することで計算時間の短縮を実現する．
-メソッド抽出リファクタリングとメソッドの引き上げリファクタリングを対象に提案手法を実装し，従来手法と計算時間および検出精度の比較を行った．
-その結果，提案手法は従来手法と比較して，メソッド抽出リファクタリングについては約1.7倍多く，メソッドの引き上げリファクタリングについては従来手法では検出できなかったリファクタリングの履歴を正確かつ高速に検出することができた．
+この研究では，機械学習モデルに対する敵対的サンプル生成において，表形式データのおける敵対的サンプルの特性を考慮した改良手法を提案しています。
+従来のLowProFoolアルゴリズムでは特定の特徴量に対して過度にノイズが付与されてしまう可能性と離散値を持つ表形式データに対して連続値の敵対的サンプルを生成してしまう課題がありました。
+そこで本研究では，特徴量の重要度算出方法を改善し，出力データの離散化を行うことで，より自然な敵対的サンプルの生成を実現しました。
+実験結果から，提案手法により過度なノイズの付与を抑制でき，より現実的な敵対的サンプルの生成が可能になりました。
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%% document starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,36 +119,30 @@
 % 研究の内容によって自分が適切だと思う章構成を考えて下さい．
 % もちろん構成について藤原と相談するのも良いと思います．
 \section{はじめに}
-\input{contents/introduction}
+\input{contents/01_introduction}
 
-\section{関連研究・用語}
-\input{contents/background}
+\section{従来手法}
+\input{contents/02_previous}
 
 \section{提案手法}
-\input{contents/method}
+\input{contents/03_proposed}
 
 \section{実験}
-\input{contents/experiment}
+\input{contents/04_experiment}
 
-\section{実験結果}
-\input{contents/result}
-
-\section{考察}
-\input{contents/discussion}
-
-\section{妥当性の脅威}
-\input{contents/threats_to_validity}
-
-\section{おわりに}
-\input{contents/conclusion}
+\section{まとめと今後の課題}
+\input{contents/05_conclusion}
 
 
 % 謝辞
 \acknowledgements
 % 謝辞の文面は過去の（豊田高専を含む）謝辞や，藤原の博士論文を参考にしてください．
 % 博士論文の謝辞は長大ですが，卒業研究論文の謝辞をそんなに長くする必要は全くないと思います．
-色々と感謝します．
-
+本論文の執筆にあたり、多くの方々から多大なるご支援とご指導を賜りましたことを，心より感謝申し上げます．
+まず，指導教員の東京都市大学メディア情報学部情報システム学科 三川健太准教授には研究の最終段階に至るまで，度重なるご指導，ご鞭撻を賜りましたことを深く感謝いたします．
+また，東京都市大学大学院環境情報学研究科環境情報学専攻 福田竜也氏には，研究の進行において多くの有益なアドバイスをいただきました．福田氏のご助言により研究をより前に進めることができました．心から感謝いたします．
+さらに，日々のゼミ活動において多くの助言を賜りました，三川研究室の皆様にも感謝いたします．特に研究の環境構築において多大なるご協力をいただいた同研究室の佐竹航希さんに，心より感謝いたします．
+皆様のご支援とご指導に，改めて感謝の意を表します．
 
 % 参考文献
 % BibTeX を使って参考文献のリストをつくって下さい．
@@ -174,8 +156,8 @@
 % 付録には，本文に直接載せるべきではない，文字通り付録となる要素を載せます．
 % 例えば，詳細な数式の展開であったり，アンケートや実験の詳細な（ほぼ完全な）結果だったりを載せます．
 % 必要であれば以下の3行のコメントアウトを外して付録を加えてください．
-%\appendix
-%\input{contents/appendix}
+\appendix
+\input{contents/appendix}
 
 \end{document}
 
