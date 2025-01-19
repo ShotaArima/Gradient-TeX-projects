@@ -28,3 +28,21 @@ docker compose run --rm texlive bash
 - Ubuntu 22.04 
 - [TeX Live](https://texwiki.texjp.org/?Linux%2FLinux%20Mint#texlive)を参考にLinuxコンテナ上でTeXを使用する環境を用意
 - `.devcontainer`を使用し、cmd+sで自動的にpdfを生成する
+
+# 書き方
+## 参考文献
+- 参照先:[proceedings.bib](./proceedings.bib)
+```bib
+@article{example2023,
+  author    = {John Doe and Jane Smith},
+  title     = {An Example Article},
+  journal   = {Journal of Examples},
+  year      = {2023},
+  volume    = {42},
+  number    = {1},
+  pages     = {1--10},
+  month     = jan,
+  note      = {An optional note},
+  doi       = {10.1234/example.2023.42.1},
+}
+```
