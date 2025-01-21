@@ -11,7 +11,7 @@
 │   ├──05_conclusion.tex : 結論
 │   └──appendix.tex : 付録
 ├──latexmkrc : LaTeX環境やコンパイルなどの設定ファイル
-└──proceedings.bib : 参考文献を記述する
+└──ref.bib : 参考文献を記述する
 ```
 
 # 実行
@@ -32,7 +32,7 @@ docker compose run --rm texlive bash
 
 # 書き方
 ## 参考文献
-- 文献の記述先:[proceedings.bib](./proceedings.bib)
+- 文献の記述先:[ref.bib](./proceedings.bib)
 ```bib
 @article{example2023,
   author    = {John Doe and Jane Smith},

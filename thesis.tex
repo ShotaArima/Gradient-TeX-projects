@@ -1,6 +1,8 @@
 \documentclass[12pt,uplatex]{jsarticle}   % 日本語
 \usepackage{tcu-thesis}
 \usepackage{fancyhdr}
+\usepackage{bm} % 太字の数式
+\usepackage{amsmath} % 数式
 
 % オリジナルマクロ by Kyohei Fushida and Kenji Fujiwara
 \newcommand{\li}{\item}
@@ -118,10 +120,32 @@
 % として使ってください．
 % 研究の内容によって自分が適切だと思う章構成を考えて下さい．
 % もちろん構成について藤原と相談するのも良いと思います．
-\section{はじめに}
+% \section{テンプレート}
+% %サンプルです．必要なければファイルごと削除してください．
+% 「はじめに」では研究の背景を述べつつ研究の目的を述べるのが一般的です．
+% 仰々しい論文の場合は論文の構成（以降の章構成）を説明したりもします．
+
+% 最初は世の中（といっても情報系分野ぐらいで十分ですが）全体の背景を述べつつ，
+% 徐々に的を絞ってどうして自身の研究を行う必要があるのかを上手く説明できると素晴らしいです．
+% 研究の背景となる課題や既存研究を紹介する際には必ず参考文献を引用するようにしましょう．
+
+% 「はじめに」は他の章に比べて非常に作成が難しいです．
+% どういう流れで書けばいいのか困った際は指導教員に聞くのもよいと思いまし，とりあえず書ける章（自分が実際に手を動かした章）から書いていくのも良いと思います．
+
+
+% \subsection{論文を書く際の注意事項}
+% \begin{itemize}
+%     \item 句読点は全角のカンマとピリオドである「，」と「．」を使って下さい．卒論執筆期間中は一時的にIMEの設定を変更して常にカンマとピリオドが使用されるようにしておくと安全だと思います．
+%     \item 表記揺れに注意しましょう．
+%     \item ですます調はNGです．
+%     \item 未定義語は使わない．一般的でない用語が出てくるタイミングで必ず説明を入れる．
+% \end{itemize}
+
+
+\section{序論}
 \input{contents/01_introduction}
 
-\section{従来手法}
+\section{準備}
 \input{contents/02_previous}
 
 \section{提案手法}
@@ -130,7 +154,7 @@
 \section{実験}
 \input{contents/04_experiment}
 
-\section{まとめと今後の課題}
+\section{結論}
 \input{contents/05_conclusion}
 
 
