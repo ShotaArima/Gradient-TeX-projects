@@ -4,11 +4,12 @@
 ├── Dockerfile
 ├── compose.yaml
 ├── contents/
-│   ├──01_introduction.tex : はじめに
-│   ├──02_previous.tex : 背景
-│   ├──03_propose.tex : 手法
-│   ├──04_experiment.tex : 実験
-│   ├──05_conclusion.tex : 結論
+│   ├──01_introduction.tex : 序論
+│   ├──02_preparation.tex : 準備
+│   ├──03_default_method.tex : 従来手法
+│   ├──04_propose_method.tex : 提案手法
+│   ├──05_experiment.tex : 実験
+│   ├──06_conclusion.tex : 結論
 │   └──appendix.tex : 付録
 ├──latexmkrc : LaTeX環境やコンパイルなどの設定ファイル
 └──ref.bib : 参考文献を記述する
