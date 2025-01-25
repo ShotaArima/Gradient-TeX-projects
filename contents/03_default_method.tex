@@ -59,7 +59,25 @@ LowProFoolでは上記の最適化問題を解くため，以下の目的関数 
 
 \subsection{従来手法の課題}
 従来手法を使用し，敵対的サンプルを生成した．生成された敵対的サンプルの一例を以下に示す．
-
+\begin{table}[H]
+    \centering
+    \caption{元データと従来手法による敵対的サンプルの比較}
+    \begin{tabular}{|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法  \\ \hline
+        checking\_status & 0 & 0.09115 \\ \hline
+        duration & 14 & 8.89098  \\ \hline
+        credit\_amount & 8978 & 7153.84454 \\ \hline
+        savings\_status & 0 & 0.083762\\ \hline
+        employment & 4 & 3.947638 \\ \hline
+        installment\_commitment & 1 & 1.071917 \\ \hline
+        residence\_since & 4 & 4.000000  \\ \hline
+        age & 45 & 44.413271 \\ \hline
+        existing\_credits & 1 & 1.000000 \\ \hline
+        num\_dependents & 1 & 1.000000 \\ \hline
+        own\_telephone & 1 & 0.992310 \\ \hline
+        foreign\_worker & 1 & 1.000000 \\ \hline
+    \end{tabular}
+\end{table}
 
 生成された敵対的サンプルを確認すると以下の課題が見られた．
 
