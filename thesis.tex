@@ -2,7 +2,82 @@
 \usepackage{tcu-thesis}
 \usepackage{fancyhdr}
 \usepackage{bm} % 太字の数式
+\usepackage{amssymb} % 数式
 \usepackage{amsmath} % 数式
+\usepackage{float} % 図表の位置
+\usepackage{listings} % ソースコード
+\usepackage{color} % ソースコードの色付け
+
+% ソースコードのスタイル設定
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  frame=single,
+  rulecolor=\color{black},
+  tabsize=2,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=false,
+  title=\lstname,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  escapeinside={\%*}{*)},
+  morekeywords={*,...}
+}
+
+% Python用のスタイル設定
+\lstdefinestyle{python}{
+  language=Python,
+  keywordstyle=\color{blue},
+  commentstyle=\color[RGB]{0,100,0},     %DarkGreen
+  stringstyle=\color[RGB]{128,0,0},      %Maroon
+  frame=single,
+  breaklines=true,
+  basicstyle=\ttfamily\footnotesize
+}
+
+% Jupyter Notebook用のスタイル設定
+\lstdefinestyle{jupyter}{
+  language=Python,
+  keywordstyle=\color{blue},
+  commentstyle=\color[RGB]{0,100,0},     %DarkGreen
+  stringstyle=\color[RGB]{128,0,0},      %Maroon
+  frame=single,
+  breaklines=true,
+  basicstyle=\ttfamily\footnotesize,
+  morekeywords={In, Out, print}
+}
+
+
+% アルゴリズムのレイアウト
+\newenvironment{algorithm_step}
+{\begin{list}{}
+    {\setlength{\leftmargin}{6em}  % Step X)の部分の幅
+     \setlength{\itemindent}{0em}
+     \setlength{\labelsep}{0em}
+     \setlength{\labelwidth}{6em}  % Step X)の部分の幅
+     \setlength{\itemsep}{1em}     % ステップ間の縦方向の間隔
+     \renewcommand{\makelabel}[1]{##1\hfill}}}
+{\end{list}}
+
+% 数式カウンターの定義
+\newcounter{myeqcounter} % 独自カウンターを定義
+
+\newcommand{\autoequation}[1]{
+\refstepcounter{myeqcounter} % カウンターを進める
+\begin{equation}
+#1 \tag{\themyeqcounter} % カウンター値をタグに適用
+\end{equation}
+}
+
 
 % オリジナルマクロ by Kyohei Fushida and Kenji Fujiwara
 \newcommand{\li}{\item}
@@ -67,7 +142,7 @@
 % 日本語氏名（姓と名の間に空白（半角）を入れて下さい）
 \author{有馬 祥太}
 
-% 欧文氏名（first name, last name の順に記入し、先頭文字のみを大文字にする。）
+% 欧文氏名（first name, last name の順に記入し，先頭文字のみを大文字にする。）
 \eauthor{Shota Arima}
 
 % 専攻
@@ -88,12 +163,12 @@
 % 内容梗概 (in LaTeX)
 %   Abstractは必須です。
 %   サンプルほど長々と書く必要はありません．
-%   注: 行の先頭が\\で始まらないようにすること。
+%   注: 行の先頭が\\で始まらないようにすること．
 \abstract{%
-この研究では，機械学習モデルに対する敵対的サンプル生成において，表形式データのおける敵対的サンプルの特性を考慮した改良手法を提案しています。
-従来のLowProFoolアルゴリズムでは特定の特徴量に対して過度にノイズが付与されてしまう可能性と離散値を持つ表形式データに対して連続値の敵対的サンプルを生成してしまう課題がありました。
-そこで本研究では，特徴量の重要度算出方法を改善し，出力データの離散化を行うことで，より自然な敵対的サンプルの生成を実現しました。
-実験結果から，提案手法により過度なノイズの付与を抑制でき，より現実的な敵対的サンプルの生成が可能になりました。
+この研究では，機械学習モデルに対する敵対的サンプル生成において，表形式データのおける敵対的サンプルの特性を考慮した改良手法を提案しています．
+従来のLowProFoolアルゴリズムでは特定の特徴量に対して過度にノイズが付与されてしまう可能性と離散値を持つ表形式データに対して連続値の敵対的サンプルを生成してしまう課題がありました．
+そこで本研究では，特徴量の重要度算出方法を改善し，出力データの離散化を行うことで，より自然な敵対的サンプルの生成を実現しました．
+実験結果から，提案手法により過度なノイズの付与を抑制でき，より現実的な敵対的サンプルの生成が可能になりました．
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%% document starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -165,7 +240,7 @@
 \acknowledgements
 % 謝辞の文面は過去の（豊田高専を含む）謝辞や，藤原の博士論文を参考にしてください．
 % 博士論文の謝辞は長大ですが，卒業研究論文の謝辞をそんなに長くする必要は全くないと思います．
-本論文の執筆にあたり、多くの方々から多大なるご支援とご指導を賜りましたことを，心より感謝申し上げます．
+本論文の執筆にあたり，多くの方々から多大なるご支援とご指導を賜りましたことを，心より感謝申し上げます．
 まず，指導教員の東京都市大学メディア情報学部情報システム学科 三川健太准教授には研究の最終段階に至るまで，度重なるご指導，ご鞭撻を賜りましたことを深く感謝いたします．
 また，東京都市大学大学院環境情報学研究科環境情報学専攻 福田竜也氏には，研究の進行において多くの有益なアドバイスをいただきました．福田氏のご助言により研究をより前に進めることができました．心から感謝いたします．
 さらに，日々のゼミ活動において多くの助言を賜りました，三川研究室の皆様にも感謝いたします．特に研究の環境構築において多大なるご協力をいただいた同研究室の佐竹航希さんに，心より感謝いたします．

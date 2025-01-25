@@ -1,0 +1,267 @@
+\begin{lstlisting}[style=jupyter, caption=敵対的サンプルを生成する流れの処理]
+# In[1]:
+# Misc
+import random
+import numpy as np
+import pandas as pd
+import tqdm
+from tqdm import tqdm
+from tqdm import tqdm_notebook
+import math
+import os
+import time
+import sys
+
+# In[2]:
+# Plotting
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# In[3]:
+# Sklearn
+import sklearn
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# In[4]:
+# Pytorch
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+import torch.nn.functional as F
+# Keras 
+import keras
+
+# In[5]:
+# Helpers
+from Adverse import lowProFool, deepfool
+from Metrics import *
+
+# In[6]:
+# Retina display
+%config InlineBackend.figure_format ='retina'
+pd.set_option('display.max_columns', 500)
+tqdm.pandas()
+np.set_printoptions(suppress=True)
+
+%load_ext autoreload
+%autoreload 2
+
+ccolors = ["#008ae9", "#ea004f"]
+sns.set_palette(ccolors)
+sns.palplot(sns.color_palette())
+
+# In[7]:
+SEED = 0
+DATASET = 'credit-g'
+
+# In[8]:
+# Load initial dataset
+df_orig, target, feature_names = get_df(DATASET)
+
+# Balance dataset classes
+df = balance_df(df_orig)
+
+# Compute the bounds for clipping
+bounds = get_bounds()
+
+# Normalize the data
+scaler, df, bounds = normalize(df, target, feature_names, bounds)
+
+# Compute the weihts modelizing the expert's knowledge
+weights = get_weights(df, target)
+print("Weights", weights)
+
+# Split df into train/test/valid
+df_train, df_test, df_valid = split_train_test_valid()
+
+# Build experimenation config
+config = {'Dataset'     : 'credit-g',
+         'MaxIters'     : 20000,
+         'Alpha'        : 0.001,
+         'Lambda'       : 8.5,
+         'TrainData'    : df_train,
+         'TestData'     : df_test,
+         'ValidData'    : df_valid,
+         'Scaler'       : scaler,
+         'FeatureNames' : feature_names,
+         'Target'       : target,
+         'Weights'      : weights,
+         'Bounds'       : bounds}
+
+# Train neural network
+model = get_model(config)
+config['Model'] = model
+
+# 推論の終了
+model.eval()
+
+# Compute accuracy on test set
+y_true = df_test[target]
+x_test = torch.FloatTensor(df_test[feature_names].values)
+y_pred = model(x_test)
+
+# y_predの確率をdataFrameに変換する処理
+y_pred_numpy = y_pred.detach().numpy()
+df_y_pred = pd.DataFrame(y_pred_numpy, columns=['0になる確率', '1になる確率'])    
+# df_testのインデックスをリセットして、適切に整列させます
+df_test_reset = df_test.reset_index()
+# df_testとdf_y_predを列方向に連結します
+df_combined_pred = pd.concat([df_test_reset, df_y_pred], axis=1)
+print('df_combined_pred', df_combined_pred)
+
+y_pred = np.argmax(y_pred.detach().numpy(), axis=1)
+print("Accuracy score on test data", accuracy_score(y_true, y_pred))
+    
+# Sub sample
+config['TestData'] = config['TestData'].sample(n=10, random_state = SEED)
+
+# Generate adversarial examples
+df_adv_lpf = gen_adv(config, 'LowProFool')
+df_adv_df = gen_adv(config, 'Deepfool')
+config['AdvData'] = {'LowProFool' : df_adv_lpf, 'Deepfool' : df_adv_df}
+
+# Compute metrics
+list_metrics = {'SuccessRate' : True,
+                'iter_means': False,
+                'iter_std': False,
+                'normdelta_median': False,
+                'normdelta_mean': True,
+                'n_std': True,
+                'weighted_median': False,
+                'weighted_mean': True,
+                'w_std': True,
+                'mean_dists_at_org': False,
+                'median_dists_at_org': False,
+                'mean_dists_at_tgt': False,
+                'mean_dists_at_org_weighted': True,
+                'mdow_std': True,
+                'median_dists_at_org_weighted': False,
+                'mean_dists_at_tgt_weighted': True,
+                'mdtw_std': True,
+                'prop_same_class_arg_org': False,
+                'prop_same_class_arg_adv': False}
+
+all_metrics = get_metrics(config, list_metrics)
+all_metrics = pd.DataFrame(all_metrics, columns=['Method'] + [k for k, v in list_metrics.items() if v])
+all_metrics
+
+# In[9]:
+plot_ratios = []
+
+m_lpf = all_metrics[all_metrics.Method == 'LowProFool']
+m_df = all_metrics[all_metrics.Method =='Deepfool']
+
+sr = m_lpf.SuccessRate.values / m_df.SuccessRate.values 
+wm =  m_lpf.weighted_mean.values / m_df.weighted_mean.values 
+
+plot_ratios.append([100*sr[0], 100*wm[0]])
+plot_ratios = pd.DataFrame(plot_ratios, columns=['Success Rate Ratio', 'Mean Perturbation Ratio'])
+plot_ratios['Dataset'] = 'German Credit'
+
+f = plt.figure()
+ax = plt.axes()
+plot_ratios.plot(x='Dataset', kind='bar', legend=True, ax=ax)
+
+for i, v in enumerate(plot_ratios['Success Rate Ratio'].values):
+    ax.text(i - 0.2, v - 12 , str(v.round(1)) + '%', fontsize=16, color='white', weight='bold')
+for i, v in enumerate(plot_ratios['Mean Perturbation Ratio'].values):
+    ax.text(i + 0.062, v - 12, str(v.round(1)) + '%', fontsize=16, color='white', weight='bold')
+
+plt.setp(ax.xaxis.get_majorticklabels(), rotation=0, ha='center')
+ax.axhline(100, ls=':', c='grey')
+ax.text(-0.49, 100 - 5, '100%')
+
+
+ax.set_yticks([])
+plt.tight_layout()
+plt.show()
+
+# In[10]:
+# # 逆正規化
+# df_adv_lpf = denormalize(scaler, df_adv_lpf, feature_names=feature_names)
+# lowprofool
+df_adv_lpf.to_csv('data/lowprofool_propose.csv')
+
+# # 逆正規化
+# df_adv_df = denormalize(scaler, df_adv_df, feature_names=feature_names)
+# deepfool
+df_adv_df.to_csv('data/deepfool_propose.csv')
+
+# In[11]:
+df_orig = pd.read_csv('data/df_orig.csv')
+df_adv_lpf = pd.read_csv('data/lowprofool_propose.csv')
+# 逆正規化
+df_adv_lpf_denorm = denormalize(config['Scaler'], df_adv_lpf, feature_names=feature_names)
+
+df_adv_df = pd.read_csv('data/deepfool_propose.csv')
+# 逆正規化
+df_adv_df_denorm = denormalize(config['Scaler'], df_adv_df, feature_names=feature_names)
+
+# In[12]:
+arrs = [685, 727, 30, 376, 66, 965, 963, 61, 282, 268]
+
+for i in arrs:
+    orig_row = df_orig[df_orig['Unnamed: 0'] == i].copy()
+    adv_lpf_row = df_adv_lpf_denorm[df_adv_lpf_denorm['Unnamed: 0'] == i].copy()
+    adv_df_row = df_adv_df_denorm[df_adv_df_denorm['Unnamed: 0'] == i].copy()
+    
+    # Rename columns to match the original format
+    orig_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in orig_row.columns]
+    adv_lpf_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in adv_lpf_row.columns]
+    adv_df_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in adv_df_row.columns]
+    
+    # Combine rows into a single DataFrame
+    combined_df = pd.concat([orig_row, adv_lpf_row, adv_df_row], keys=['orig', 'adv_lpf', 'adv_df']).reset_index(level=0).rename(columns={'level_0': 'type'})
+    
+    # Save the DataFrame as df_output_{id}
+    globals()[f'df_output_{i}'] = combined_df
+
+# Example to access one of the generated DataFrames
+df_output_685
+
+# In[13]:
+df_output_727
+
+# In[14]:
+df_output_30
+
+# In[15]:
+arrs = [685, 727, 30, 376, 66, 965, 963, 61, 282, 268]
+
+for i in arrs:
+    orig_row = df_orig[df_orig['Unnamed: 0'] == i].copy()
+    adv_lpf_row = df_adv_lpf_denorm[df_adv_lpf_denorm['Unnamed: 0'] == i].copy()
+    adv_df_row = df_adv_df_denorm[df_adv_df_denorm['Unnamed: 0'] == i].copy()
+    
+    # Rename columns to match the original format
+    orig_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in orig_row.columns]
+    adv_lpf_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in adv_lpf_row.columns]
+    adv_df_row.columns = [col if col != 'Unnamed: 0' else 'id' for col in adv_df_row.columns]
+    
+    # Combine rows into a single DataFrame
+    combined_df = pd.concat([orig_row, adv_lpf_row, adv_df_row], keys=['orig', 'adv_lpf', 'adv_df']).reset_index(level=0).rename(columns={'level_0': 'type'})
+    
+    # Round and convert to int
+    combined_df.loc[:, combined_df.columns != 'type'] = combined_df.loc[:, combined_df.columns != 'type'].fillna(0).round().astype(int)
+    
+    # Save the DataFrame as df_output_{id}
+    globals()[f'df_output_i_{i}'] = combined_df
+
+# In[16]:
+df_output_i_685
+
+# In[17]:
+df_output_i_727
+
+# In[18]:
+df_output_i_30
+
+# In[19]:
+df_output_i_376
+
+
+
+\end{lstlisting}
