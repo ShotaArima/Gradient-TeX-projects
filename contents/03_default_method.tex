@@ -46,45 +46,45 @@ LowProFoolでは上記の最適化問題を解くため，以下の目的関数 
 
 前述の通り，識別に寄与する特徴量を考慮した上で，ノイズを付加する．特徴量重要度 $\bm{v}$ の算出は，分類結果に対する各特徴量の相関係数を用いることが提案されていた．ピアソンの相関係数を用いて以下のように定義される．
 
-\autoequation{\bm{v} = \cfrac{|\rho_{\bm{X},Y}|}{\|\rho_{\bm{X_i},Y}\|^2_2}}
-ここで，$d$ は特徴量の次元数，$\|\rho_{\bm{X},Y}\|$ は $i$ 番目の特徴量 $\bm{X_i}$ と目的変数 $\bm{Y}$ の相関係数を示している．各特徴量と目的変数の関係性の強さを示す指標であり，値が大きいほどその特徴量が分類結果に寄与していることを意味する．また，分母は全ての特徴量の寄与度の二乗和の平方根を表し，全体の相関のスケールに対して分子を正規化している．これにより，特徴量重要度 $\bm{v}$ は，各特徴量が持つ相関の相対的な重要性を反映した値となる．この特性により，上記のアルゴリズムでは最小化を行うため，相関係数が大きい特徴量に対しては小さなノイズが付加されることになり，重要度を表現することができる．今回のデータセットによって生成された特徴量重要度を算出した図を下に示す．
+\autoequation{v_i = \cfrac{|\rho_{\bm{X_i},Y}|}{\|\rho_{\bm{X_i},Y}\|^2_2}}
+$\|\rho_{\bm{X_i},Y}\|$ は $i$ 番目の特徴量 $\bm{X_i}$ と目的変数 $\bm{Y}$ の相関係数を示している．各特徴量と目的変数の関係性の強さを示す指標であり，値が大きいほどその特徴量が分類結果に寄与していることを意味する．また，分母は全ての特徴量の寄与度の二乗和の平方根を表し，全体の相関のスケールに対して分子を正規化している．これにより，$d$ 個の特徴量についてまとめた特徴量重要度 $[ \bm{v} = \{v_1, v_2, \cdots, v_d\} ]$ は，各特徴量が持つ相関の相対的な重要性を反映した値となる．この特性により，上記のアルゴリズムでは最小化を行うため，相関係数が大きい特徴量に対しては小さなノイズが付加されることになり，重要度を表現することができる．
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/従来手法_特徴量重要度.png}
-    \caption{従来手法：各特徴量における重要度}
-    \label{fig:default_method_feature_importance}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{images/従来手法_特徴量重要度.png}
+%     \caption{従来手法：各特徴量における重要度}
+%     \label{fig:default_method_feature_importance}
+% \end{figure}
 
 
 \subsection{従来手法の課題}
-従来手法を使用し，敵対的サンプルを生成した．生成された敵対的サンプルの一例を以下に示す．
-\begin{table}[H]
-    \centering
-    \caption{元データと従来手法による敵対的サンプルの比較}
-    \begin{tabular}{|c|c|c|} \hline
-        特徴量 & 元データ & 従来手法  \\ \hline
-        checking\_status & 0 & 0.09115 \\ \hline
-        duration & 14 & 8.89098  \\ \hline
-        credit\_amount & 8978 & 7153.84454 \\ \hline
-        savings\_status & 0 & 0.083762\\ \hline
-        employment & 4 & 3.947638 \\ \hline
-        installment\_commitment & 1 & 1.071917 \\ \hline
-        residence\_since & 4 & 4.000000  \\ \hline
-        age & 45 & 44.413271 \\ \hline
-        existing\_credits & 1 & 1.000000 \\ \hline
-        num\_dependents & 1 & 1.000000 \\ \hline
-        own\_telephone & 1 & 0.992310 \\ \hline
-        foreign\_worker & 1 & 1.000000 \\ \hline
-    \end{tabular}
-\end{table}
 
-生成された敵対的サンプルを確認すると以下の課題が見られた．
+% \begin{table}[H]
+%     \centering
+%     \caption{元データと従来手法による敵対的サンプルの比較}
+%     \begin{tabular}{|c|c|c|} \hline
+%         特徴量 & 元データ & 従来手法  \\ \hline
+%         checking\_status & 0 & 0.09115 \\ \hline
+%         duration & 14 & 8.89098  \\ \hline
+%         credit\_amount & 8978 & 7153.84454 \\ \hline
+%         savings\_status & 0 & 0.083762\\ \hline
+%         employment & 4 & 3.947638 \\ \hline
+%         installment\_commitment & 1 & 1.071917 \\ \hline
+%         residence\_since & 4 & 4.000000  \\ \hline
+%         age & 45 & 44.413271 \\ \hline
+%         existing\_credits & 1 & 1.000000 \\ \hline
+%         num\_dependents & 1 & 1.000000 \\ \hline
+%         own\_telephone & 1 & 0.992310 \\ \hline
+%         foreign\_worker & 1 & 1.000000 \\ \hline
+%     \end{tabular}
+% \end{table}
+
+この手法について2つの問題をはらんでいる可能性がある
 
 一つ目に特定の特徴量に対するノイズが集中してしまっていることをも挙げられる．特徴量重要度の算出方法において，相関係数が大きい特徴量に対してノイズを大きく避けるため，次に重要な特徴量へのノイズ集中してしまっている可能性がある．よって明らかに不自然に大きいノイズを抑えるような特徴量重要度の算出が重要になっている．
     
 
-二つ目に，敵対的サンプルの出力が連続値であることが挙げられる．今回使用するデータセットは前述の通り特徴量が全て離散値である．敵対的サンプルが連続値を取ることで，離散値を持つ特徴量に対して生成された敵対的サンプルが現実的でない値をとってしまっている．このため，連続値の敵対的サンプルを離散値に変換する必要がある．
+二つ目に，敵対的サンプルの出力が連続値であることが挙げられる．離散値を持つ特徴量に対して連続値を取る敵対的サンプルを生成することで，現実的でない値をとってしまっている．このため，連続値の敵対的サンプルを離散値に変換する必要がある．
 
 
 これらの課題に対して，次節では改良手法を提案する．
