@@ -47,21 +47,24 @@
 \subsection{評価指標}
 提案手法の有効性の評価として以下の3つの指標を用い比較を行う．
 一つ目に敵対的サンプルが元データと異なるクラスに分類されることを評価する指標である．これを成功率と呼び，式(9)に示す．
-\autoequation{成功率 = \cfrac{|\hat{X}|}{|X|}}
-ここで $\hat{X}$ は生成された敵対的サンプルが元データと異なるクラスに分類されたサンプルの集合であり，$X$ は全サンプルの集合である．この指標が大きいほど敵対的サンプルが元データと異なるクラスに分類されることが多いことを示す．
+\autoequation{成功率 = \cfrac{|\tilde{X}|}{|X|}}
+ここで $\tilde{X}$ は生成された敵対的サンプルが元データと異なるクラスに分類されたサンプルの集合であり，$X$ は生成された敵対的サンプルのベースとなった元データのサンプルの集合である．この指標が大きいほど敵対的サンプルが元データと異なるクラスに分類されることが多いことを示す．
 
-二つ目に敵対的サンプル生成前のサンプルと生成後のサンプル間の距離を評価する指標である．これを平均距離と呼び，式(10)に示す．
-\autoequation{平均距離 = \cfrac{1}{N} \sum^{N}_{i=1} \sqrt{\sum^{d}_{j=1}(\mathrm{orig}_{i, j}-\mathrm{adv}_{i, j})^2}}
-この指標が小さいほどノイズが小さく，元データに近いサンプルが生成されていることを示す．
+二つ目に敵対的サンプル生成前のサンプルと生成後のサンプル間の距離を評価する指標である．まず、先ほどの敵対的サンプルとそのベースとなった元データのサンプルの集合について以下のように定義する。
+\autoequation{X = [\bm{x_1}, \bm{x_2}, \cdots, \bm{x_N} ]}
+以上をふまえ、以下の式(10)を平均距離として評価する．
+\autoequation{平均距離 = \cfrac{1}{N} \sum^{N}_{i=1} \sqrt{\sum^{d}_{j=1}(\bm{x}_{i, j}-\bm{\tilde{x}}_{i, j})^2}}
+
+これは、敵対的サンプルとその元になったデータの差分を求めている。これは敵対的サンプルを生成する過程で加えられたノイズの大きさを表しており、この指標が小さいほどノイズが小さく，元データに近いサンプルが生成されていることを示す．
 
 三つ目に先ほどの平均距離に対して各特徴量の重要度で重み付けした指標である．これを重み距離と呼び，式(11)に示す．
-\autoequation{重み距離 =  \cfrac{1}{N} \sum^{N}_{i=1} \sqrt{\sum^{d}_{j=1}( | \mathrm{orig}_{i, j}-\mathrm{adv}_{i, j}| \cdot v_i )^2}}
-ここで使用する重要度 $\bm{v}$ は，従来手法で使用していた特徴量重要度 $\bm{v}$ と同様のものを使用する．この指標が小さいほど分類に対する重要度の高い特徴量に対するノイズが小さいことを示す．
+\autoequation{重み距離 =  \cfrac{1}{N} \sum^{N}_{i=1} \sqrt{\sum^{d}_{j=1}( | \bm{x}_{i, j}-\bm{\tilde{x}}_{i, j}| \cdot v_j )^2}}
+ここでは先ほどの平均距離で計算していた敵対的サンプルとその元になったデータの距離に対して、式(6)で定義した重要度を $\bm{v_j}$ とし、重み付けを行った距離を求めている。これは、重要度の高い特徴量へノイズを加えることで、目立ちやすく人間が知覚しやすい変更が行われていることを意味してしまう．よって、敵対的サンプルの定義である人間が知覚しずらいノイズであるかどうかを判断するためこの指標を用いる。平均距離同様この値が小さいほどより自然で人間が知覚しずらいノイズを付加したことがわかる．
 
 各指標を組み合わせて使用することで，生成した敵対的サンプルの「有効性」と「自然さ」の両面を総合的に評価することを目指す．
 
 \subsection{実験結果}
-まず成功率について確認する．
+一つ目の評価指標である成功率について確認する．
 \begin{table}[H]
     \centering
     \caption{実験結果:成功率}
@@ -72,9 +75,9 @@
         離散化(ランダム) & 1.0 & 1.0 & 1.0 \\ \hline
     \end{tabular}
 \end{table}
-すべての手法で10個の敵対的サンプルの生成ができた．
+すべての手法で10個の敵対的サンプルの生成ができた．これにより、提案手法による敵対的サンプルの精度の悪化などは発生していないことがわかる。よって、以降の平均距離、重み距離についてこの10個のサンプルを用いて評価を行っていく。
 
-次に平均距離について確認する．
+二つ目の評価指標である平均距離について確認する．
 \begin{table}[H]
     \centering
     \caption{実験結果:平均距離}
@@ -87,7 +90,7 @@
 \end{table}
 この結果から，従来手法よりも提案手法は，元データに近い敵対的サンプルを生成できていることがわかる．離散化手法については四捨五入の方がよりノイズが小さくなっていることがわかる．重要度については式(8)が一番小さい距離を示しており，四捨五入による離散化手法では，この実験で最小の距離を示す．
 
-次に重み距離について確認する．
+三つ目の評価指標である重み距離について確認する．
 \begin{table}[H]
     \centering
     \caption{実験結果:重み距離}
@@ -100,7 +103,7 @@
 \end{table}
 この結果から，提案手法は従来手法よりも良いスコアを出すことができなかった．しかし，重要度算出(式(7))における四捨五入による離散化手法では，一番従来手法に近い距離を示している．
 
-最後に，従来手法(式(6))，提案手法(式(7))，提案手法(式(8))における特徴量重要度について以下の図に示す．
+次に，従来手法(式(6))，提案手法(式(7))，提案手法(式(8))における特徴量重要度について以下の図に示す．
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/実験_重要度算出の結果.png}
@@ -108,6 +111,209 @@
     \label{fig:adversarial_example}
 \end{figure}
 重要度について比較すると，従来手法では，checking\_statusに対する重要度が飛び抜けており，次に重要度の高い特徴量との差が大きいことが指摘されていた．提案手法ではその差が小さくなっていることが確認できる．また，提案手法(式(8))では，特徴量の重要度がより均等になっていることがわかる．これにより，提案手法はより自然な敵対的サンプルを生成できることが示された．
+
+最後に、従来手法、提案手法によって生成された敵対的サンプルについて確認する。
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=685)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 3 & 0.09115 & 0\\ \hline
+        duration & 60 & 8.89098 & 15 \\ \hline
+        credit\_amount & 6527 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 4 & 0.083762 & 0\\ \hline
+        employment & 2 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 4 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 34 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 2 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 0 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=2)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=3)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=4)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=5)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=6)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=7)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=8)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=9)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=268)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0\\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.083762 & 0\\ \hline
+        employment & 4 & 3.947638  & 4 \\ \hline
+        installment\_commitment & 1 & 1.071917 & 1\\ \hline
+        residence\_since & 4 & 4.000000 & 2 \\ \hline
+        age & 45 & 44.413271 & 45 \\ \hline
+        existing\_credits & 1 & 1.000000 & 1 \\ \hline
+        num\_dependents & 1 & 1.000000 & 1 \\ \hline
+        own\_telephone & 1 & 0.992310 & 1 \\ \hline
+        foreign\_worker & 1 & 1.000000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+
 \subsection{考察}
 以上の実験結果を考察すると，提案手法は従来手法よりも元データに近い敵対的サンプルを生成することが示された．特に成功率および平均距離の指標では，提案手法(式(7))が従来手法を上回る性能を発揮した．この結果は，提案手法が重要度算出と離散化の適切な組み合わせにより，必要最小限のノイズで誤分類を誘発する敵対的サンプルを生成できたためと考えられる．一方で，重み距離の結果において提案手法（式(8)）が劣る原因としては，重要度算出アルゴリズムにおける平方根操作の影響が挙げられる．平方根は大きい値を小さく小さい値を大きくするため図8で従来手法と比較するとより滑らかな重要度
 となっている．分類性能に影響を与える重要な特徴量に対する変化が抑制されなかったことが考えられる．これにより自然な敵対的サンプルの生成を行うことができなかったということがわかる．
