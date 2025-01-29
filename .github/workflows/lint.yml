@@ -15,18 +15,13 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install textlint and rules
-        run: npm install -g textlint textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
+      - name: Install textlint and plugins
+        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
 
       - name: Run textlint
-        run: textlint -f checkstyle thesis.tex content/**/*.tex > textlint-report.xml
+        run: |
+          textlint -f checkstyle thesis.tex content/**/*.tex > textlint-report.xml || \
+          (echo "textlint found errors. See textlint-report.xml" && cat textlint-report.xml && exit 1)
 
-
-      - name: Run reviewdog
-        uses: reviewdog/action-eslint@v1  # 公式の reviewdog Action
-        with:
-          reporter: github-pr-check
-          level: warning
-          filter_mode: file
-          fail_on_error: true
-          eslint_flags: "textlint-report.xml"
+      - name: Show lint errors in GitHub Actions logs
+        run: cat textlint-report.xml
