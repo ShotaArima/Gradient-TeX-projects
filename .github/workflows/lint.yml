@@ -1,4 +1,4 @@
-name: Lint Check
+name: textlint-check
 
 on:
   pull_request:
@@ -7,19 +7,18 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # 特定のバージョンを指定
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install textlint and rules
         run: npm install -g textlint textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
 
-      - name: Run textlint
-        run: textlint your-thesis.tex
+      - name: Run textlint with detailed output
+        run: textlint -f checkstyle your-thesis.tex | npx reviewdog -f=checkstyle -name="textlint" -reporter=github-pr-check
 
