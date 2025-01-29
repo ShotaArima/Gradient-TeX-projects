@@ -2,11 +2,11 @@ name: textlint-check
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened] # PRがオープンされたとき、同期されたとき、再オープンされたとき
+    types: [opened, synchronize, reopened]
 
 jobs:
   lint:
-    runs-on: ubuntu-22.04  # 特定のバージョンを指定
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -18,6 +18,14 @@ jobs:
       - name: Install textlint and rules
         run: npm install -g textlint textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
 
-      - name: Run textlint with detailed output
-        run: textlint -f checkstyle your-thesis.tex | npx reviewdog -f=checkstyle -name="textlint" -reporter=github-pr-check
+      - name: Run textlint
+        run: textlint -f checkstyle your-thesis.tex > textlint-report.xml
 
+      - name: Run reviewdog
+        uses: reviewdog/action-eslint@v1  # 公式の reviewdog Action
+        with:
+          reporter: github-pr-check
+          level: warning
+          filter_mode: file
+          fail_on_error: true
+          eslint_flags: "textlint-report.xml"
