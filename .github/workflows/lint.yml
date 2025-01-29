@@ -19,7 +19,8 @@ jobs:
         run: npm install -g textlint textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
 
       - name: Run textlint
-        run: textlint -f checkstyle your-thesis.tex > textlint-report.xml
+        run: textlint -f checkstyle thesis.tex content/**/*.tex > textlint-report.xml
+
 
       - name: Run reviewdog
         uses: reviewdog/action-eslint@v1  # 公式の reviewdog Action
