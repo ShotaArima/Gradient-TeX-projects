@@ -1,0 +1,11 @@
+{
+  "plugins": ["latex2e"],
+  "rules": {
+    "no-mix-dearu-desumasu": true,
+    "no-halfwidth-punctuation": true, 
+    "no-fullwidth-punctuation": false  
+  },
+  "prh": {
+    "rulePaths": ["prh-rules.yml"]
+  }
+}

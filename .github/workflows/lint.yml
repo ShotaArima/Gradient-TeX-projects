@@ -1,4 +1,4 @@
-name: textlint-check
+name: Lint Thesis
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
           node-version: '18'
 
       - name: Install textlint and plugins
-        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-prh textlint-rule-no-mix-dearu-desumasu
+        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-no-mix-dearu-desumasu textlint-rule-no-halfwidth-punctuation
 
       - name: Run textlint
         run: |
