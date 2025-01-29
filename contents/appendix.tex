@@ -4,53 +4,206 @@ ReLU関数は、入力が0より大きい場合はそのまま出力し、0以�
 
 \subsection*{Softmax関数}
 
-\subsection*{生成された敵対的サンプルの結果}
-
-
-
+\subsection*{全ての敵対的サンプルの生成結果}
 \begin{table}[H]
     \centering
-    \caption{敵対的サンプルのベースとなる元データ（前半）}
-    \begin{tabular}{|c|c|c|c|c|c|c|}
-        \hline
-        特徴量 & 685 & 727 & 30 & 376 & 66 & 965 \\ \hline
-        checking\_status & 3 & 0 & 1 & 3 & 3 & 1 \\ \hline
-        duration & 60 & 18 & 18 & 18 & 12 & 30 \\ \hline
-        credit\_amount & 6527 & 1882 & 1913 & 2320 & 2171 & 1715 \\ \hline
-        savings\_status & 4 & 0 & 3 & 0 & 0 & 4 \\ \hline
-        employment & 2 & 2 & 1 & 0 & 1 & 2 \\ \hline
-        installment\_commitment & 4 & 4 & 3 & 2 & 2 & 4 \\ \hline
-        residence\_since & 4 & 4 & 3 & 3 & 2 & 1 \\ \hline
-        age & 34 & 5 & 36 & 34 & 29 & 26 \\ \hline
-        existing\_credits & 1 & 2 & 1 & 2 & 1 & 1 \\ \hline
-        num\_dependents & 2 & 1 & 1 & 1 & 1 & 1 \\ \hline
-        own\_telephone & 1 & 0 & 1 & 0 & 0 & 0 \\ \hline
-        foreign\_worker & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    \caption{元データと敵対的サンプルの比較(id=685)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 3 & 3.00000 & 3 \\ \hline
+        duration & 60 & 59.64395 & 60 \\ \hline
+        credit\_amount & 6527 & 6402.54016 & 6662 \\ \hline
+        savings\_status & 4 & 4.00000 & 4 \\ \hline
+        employment & 2 & 2.05595 & 2 \\ \hline
+        installment\_commitment & 4 & 3.89709 & 4 \\ \hline
+        residence\_since & 4 & 3.81750 & 4 \\ \hline
+        age & 34 & 34.79812 & 34 \\ \hline
+        existing\_credits & 1 & 1.07257 & 1 \\ \hline
+        num\_dependents & 2 & 2.00000 & 2 \\ \hline
+        own\_telephone & 1 & 1.00000 & 1 \\ \hline
+        foreign\_worker & 0 & 0.01272 & 0 \\ \hline
     \end{tabular}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \caption{敵対的サンプルのベースとなる元データ（後半）}
-    \begin{tabular}{|c|c|c|c|c|c|c|}
-        \hline
-        特徴量 & 963 & 61 & 282 & 268 \\ \hline
-        checking\_status & 3 & 1 & 2 & 0 \\ \hline
-        duration & 24 & 15 & 18 & 14 \\ \hline
-        credit\_amount & 2397 & 1537 & 1445 & 8978 \\ \hline
-        savings\_status & 2 & 4 & 4 & 0 \\ \hline
-        employment & 4 & 4 & 3 & 4 \\ \hline
-        installment\_commitment & 3 & 4 & 4 & 1 \\ \hline
-        residence\_since & 2 & 4 & 4 & 4 \\ \hline
-        age & 35 & 50 & 49 & 45 \\ \hline
-        existing\_credits & 2 & 2 & 1 & 1 \\ \hline
-        num\_dependents & 1 & 1 & 1 & 1 \\ \hline
-        own\_telephone & 1 & 1 & 0 & 1 \\ \hline
-        foreign\_worker & 0 & 0 & 0 & 1 \\ \hline
+    \caption{元データと敵対的サンプルの比較(id=727)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.10421 & 0 \\ \hline
+        duration & 18 & 12.31384 & 12 \\ \hline
+        credit\_amount & 1882 & 1295.97887 & 1842 \\ \hline
+        savings\_status & 0 & 0.00000 & 0 \\ \hline
+        employment & 2 & 2.14427 & 2 \\ \hline
+        installment\_commitment & 4 & 3.84823 & 4 \\ \hline
+        residence\_since & 4 & 4.00000 & 4 \\ \hline
+        age & 25 & 24.67238 & 26 \\ \hline
+        existing\_credits & 2 & 1.87055 & 2 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 0 & 0.08119 & 0 \\ \hline
+        foreign\_worker & 0 & 0.08743 & 0 \\ \hline
     \end{tabular}
 \end{table}
 
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=30)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 1 & 0.98726 & 1 \\ \hline
+        duration & 18 & 26.67121 & 21 \\ \hline
+        credit\_amount & 1913 & 4310.37810 & 2502 \\ \hline
+        savings\_status & 3 & 2.81569 & 3 \\ \hline
+        employment & 1 & 0.68478 & 1 \\ \hline
+        installment\_commitment & 3 & 2.89053 & 3 \\ \hline
+        residence\_since & 3 & 3.04883 & 3 \\ \hline
+        age & 36 & 31.62778 & 35 \\ \hline
+        existing\_credits & 1 & 1.16926 & 1 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 1 & 1.00000 & 1 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
 
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=376)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 3 & 2.99326 & 3 \\ \hline
+        duration & 18 & 18.90157 & 19 \\ \hline
+        credit\_amount & 2320 & 2616.97568 & 2444 \\ \hline
+        savings\_status & 0 & 0.00000 & 0 \\ \hline
+        employment & 0 & 0.00000 & 0 \\ \hline
+        installment\_commitment & 2 & 1.99127 & 2 \\ \hline
+        residence\_since & 3 & 2.94288 & 3 \\ \hline
+        age & 34 & 33.67031 & 33 \\ \hline
+        existing\_credits & 2 & 2.06425 & 2 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 0 & 0.00708 & 0 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=66)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 3 & 2.97802 & 3 \\ \hline
+        duration & 12 & 15.30682 & 12 \\ \hline
+        credit\_amount & 2171 & 3085.97952 & 2166 \\ \hline
+        savings\_status & 0 & 0.00000 & 0 \\ \hline
+        employment & 1 & 0.82279 & 1 \\ \hline
+        installment\_commitment & 2 & 2.06655 & 2 \\ \hline
+        residence\_since & 2 & 1.78455 & 4 \\ \hline
+        age & 29 & 27.56905 & 30 \\ \hline
+        existing\_credits & 1 & 1.15188 & 1 \\ \hline
+        num\_dependents & 1 & 1.00652 & 1 \\ \hline
+        own\_telephone & 0 & 0.00254 & 0 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=965)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 1 & 1.02100 & 1 \\ \hline
+        duration & 30 & 29.61788 & 29 \\ \hline
+        credit\_amount & 1715 & 1774.60505 & 1953 \\ \hline
+        savings\_status & 4 & 4.00000 & 4 \\ \hline
+        employment & 2 & 2.05001 & 2 \\ \hline
+        installment\_commitment & 4 & 3.90929 & 4 \\ \hline
+        residence\_since & 1 & 1.00000 & 1 \\ \hline
+        age & 26 & 26.28035 & 27 \\ \hline
+        existing\_credits & 1 & 1.07305 & 1 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 0 & 0.01948 & 0 \\ \hline
+        foreign\_worker & 0 & 0.01263 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=963)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 3 & 2.95012 & 3 \\ \hline
+        duration & 24 & 29.54441 & 38 \\ \hline
+        credit\_amount & 2397 & 6665.81712 & 6006 \\ \hline
+        savings\_status & 2 & 1.92785 & 1 \\ \hline
+        employment & 4 & 3.05750 & 3 \\ \hline
+        installment\_commitment & 3 & 2.53423 & 3 \\ \hline
+        residence\_since & 2 & 3.75597 & 2 \\ \hline
+        age & 35 & 34.09681 & 33 \\ \hline
+        existing\_credits & 2 & 3.76972 & 2 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 1 & 1.00000 & 1 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=61)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 1 & 0.97901 & 1 \\ \hline
+        duration & 15 & 15.73483 & 36 \\ \hline
+        credit\_amount & 1537 & 1638.61758 & 3553 \\ \hline
+        savings\_status & 4 & 4.00000 & 3 \\ \hline
+        employment & 4 & 4.00000 & 4 \\ \hline
+        installment\_commitment & 4 & 4.00000 & 4 \\ \hline
+        residence\_since & 4 & 4.00000 & 4 \\ \hline
+        age & 50 & 48.60601 & 44 \\ \hline
+        existing\_credits & 2 & 1.00061 & 2 \\ \hline
+        num\_dependents & 1 & 1.99985 & 1 \\ \hline
+        own\_telephone & 1 & 0.42356 & 1 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=282)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 2 & 1.98965 & 2 \\ \hline
+        duration & 18 & 18.49591 & 30 \\ \hline
+        credit\_amount & 1445 & 1424.90372 & 3510 \\ \hline
+        savings\_status & 4 & 4.00000 & 4 \\ \hline
+        employment & 3 & 2.98032 & 3 \\ \hline
+        installment\_commitment & 4 & 4.00000 & 4 \\ \hline
+        residence\_since & 4 & 4.00000 & 4 \\ \hline
+        age & 49 & 48.38294 & 52 \\ \hline
+        existing\_credits & 1 & 1.00000 & 1 \\ \hline
+        num\_dependents & 1 & 1.83372 & 1 \\ \hline
+        own\_telephone & 0 & 0.00000 & 0 \\ \hline
+        foreign\_worker & 0 & 0.00000 & 0 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{元データと敵対的サンプルの比較(id=268)}
+    \begin{tabular}{|c|c|c|c|} \hline
+        特徴量 & 元データ & 従来手法 & 提案手法 \\ \hline
+        checking\_status & 0 & 0.09115 & 0 \\ \hline
+        duration & 14 & 8.89098 & 15 \\ \hline
+        credit\_amount & 8978 & 7153.84454 & 9169 \\ \hline
+        savings\_status & 0 & 0.08376 & 0 \\ \hline
+        employment & 4 & 3.94764 & 4 \\ \hline
+        installment\_commitment & 1 & 1.07192 & 1 \\ \hline
+        residence\_since & 4 & 4.00000 & 2 \\ \hline
+        age & 45 & 44.41327 & 45 \\ \hline
+        existing\_credits & 1 & 1.00000 & 1 \\ \hline
+        num\_dependents & 1 & 1.00000 & 1 \\ \hline
+        own\_telephone & 1 & 0.99231 & 1 \\ \hline
+        foreign\_worker & 1 & 1.00000 & 1 \\ \hline
+    \end{tabular}
+\end{table}
 
 % 印刷量が膨大になる場合、コメントアウトを行う
 %\section*{ソースコード}
