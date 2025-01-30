@@ -7,7 +7,7 @@
     \centering
     \includegraphics[width=0.8\textwidth]{images/審査モデル.png}
     \caption{銀行のローン審査を行う機械学習モデルの構造}
-    \label{fig:adversarial_example}
+    \label{fig:struct_model}
 \end{figure}
 
 また，学習においてBCELoss(Binary Cross Entropy Loss)が損失関数として使用している．モデルが各サンプルに対して予測した確率と実際のラベルとの誤差を計算し，二値分類における誤差を最小化する．最適化アルゴリズムにはAdamを使用し，学習率は $1.0 \times 10^{-4}$ に設定されている．バッチ学習を行い，バッチサイズは $N=100$ となっている．データを小分けにして学習を進め，予測精度はkeras.utils.to\_categoricalを用いてワンホットエンコーディングに変換し，各バッチで予測精度を計算した後，全データで平均を取っている．これによりモデルの分類精度を評価する．
@@ -116,7 +116,7 @@
     \centering
     \includegraphics[width=0.8\textwidth]{images/実験_重要度算出の結果.png}
     \caption{各特徴量における重要度}
-    \label{fig:adversarial_example}
+    \label{fig:importance}
 \end{figure}
 重要度について比較すると，従来手法では，checking\_statusに対する重要度が最も高く，次に重要度の高いdurationやcredit\_amountとの差が大きく離れていることがわかる．提案手法($\bm{v}_{\mathrm{raw}}$)は従来手法と比較し重要度の高い特徴量の値が特に小さくなっていることが確認できる．また，提案手法($\bm{v}_{\mathrm{sqrt}}$)では，提案手法($\bm{v}_{\mathrm{raw}}$)と比較して重要度の低い特徴量が大きく表現され特徴量間の差が小さく現れている．
 

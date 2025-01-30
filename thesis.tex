@@ -178,12 +178,16 @@
 % 表紙 および アブストラクト
 %
 \input{contents/cover}
+\thispagestyle{empty}
 % \titlepage
 % \jabstractpage
 %
 % 目次
 %
+\clearpage
+\pagenumbering{roman} % ページ番号をローマ数字にする
 \tableofcontents
+\clearpage
 \newpage
 
 % 以降本文

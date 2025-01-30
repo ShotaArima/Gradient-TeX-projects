@@ -6,8 +6,8 @@
 \subsection{重要度算出法の改善}
 重要度算出法における課題として，相関係数の絶対値を正規化することで元データの分布の特徴をうまく捉えていない可能性が存在する．そこで本研究では，この課題を解決するために以下の2つの新しい算出式を提案する．
 
-\autoequation{\bm{v_{\mathrm{raw}}} = |\rho_{\bm{X},Y}|}
-\autoequation{\bm{v_{\mathrm{sqrt}}} = \sqrt{\cfrac{|\rho_{\bm{X},Y}|}{\sum^{d}_{i=1}{\|\rho_{\bm{X_i},Y}\|_2^2}}}}
+\autoequation{\bm{v_{\mathrm{raw},i}} = |\rho_{\bm{X},\bm{Y}}|}
+\autoequation{\bm{v_{\mathrm{sqrt}, i}} = \sqrt{\cfrac{|\rho_{\bm{X},\bm{Y}}|}{\sum^{d}_{i=1}{\|\rho_{\bm{X_i},\bm{Y}}\|_2^2}}}}
 
 式(7)では，特徴量 $\bm{X}$ と目的変数 $\bm{Y}$ の相関係数の絶対値を使用して重要度を算出する．この式では従来手法と異なり，特定の特徴量に過剰なノイズが加わるリスクを軽減することができる．
 
@@ -28,7 +28,7 @@
 提案手法を組み込んだ全体のアルゴリズムについて以下のステップで構成する．
 
 \begin{algorithm_step}
-    \item[Step 1)] 特徴量ベクトル $\bm{X}$ と目的変数 $\bm{Y}$ を用意する．
+    \item[Step 1)] 元データ $\bm{X}$ と目的変数 $\bm{Y}$ を用意する．
     \item[Step 2)] 相関係数の絶対値を用いて重要度ベクトル $\bm{v_{\mathrm{raw}}}$ と $\bm{v_{\mathrm{sqrt}}}$ をそれぞれ算出する．
     \item[Step 3)] それぞれの重要度ベクトルを入力とし，LowProFoolアルゴリズムによる敵対的サンプルの生成を行う
     \item[Step 4)] 生成された敵対的サンプルを離散化手法により変換する．
