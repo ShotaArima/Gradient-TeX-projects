@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-# タイムゾーンの設定で対話モードを回避
+# タイムゾーン設定（対話モード回避）
 ENV TZ=Asia/Tokyo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -13,8 +13,10 @@ RUN apt-get update && apt-get install -y \
     latexmk \
     gzip \
     zip \
+    git \
     unzip \
     make \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,3 +33,15 @@ WORKDIR /work
 
 # 環境変数の設定
 ENV LANG=ja_JP.UTF-8
+
+# Node.js 18 をインストール（公式リポジトリ使用）
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js パッケージのインストール
+ENV PATH=/work/node_modules/.bin:$PATH
+COPY package.json /work/
+COPY package-lock.json /work/
+RUN npm install
