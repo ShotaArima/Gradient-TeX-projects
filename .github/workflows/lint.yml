@@ -20,7 +20,7 @@ jobs:
 
       - name: Run textlint
         run: |
-          textlint --config .textlintrc -f checkstyle thesis.tex content/**/*.tex > textlint-report.xml || \
+          npx textlint --config .textlintrc -f checkstyle thesis.tex content/**/*.tex > textlint-report.xml || \
           (echo "textlint found errors. See textlint-report.xml" && cat textlint-report.xml && exit 1)
 
       - name: Show lint errors in GitHub Actions logs
