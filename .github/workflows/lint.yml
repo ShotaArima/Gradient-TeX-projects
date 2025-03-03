@@ -16,7 +16,7 @@ jobs:
           node-version: '18'
 
       - name: Install textlint and plugins
-        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-no-mix-dearu-desumasu textlint-rule-no-halfwidth-punctuation
+        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-no-mix-dearu-desumasu
 
       - name: Run textlint
         run: |
