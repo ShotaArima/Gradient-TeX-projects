@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install textlint and plugins
-        run: npm install -g textlint textlint-plugin-latex2e textlint-rule-no-mix-dearu-desumasu
+      - name: Install textlint
+        run: npm install 
 
       - name: Run textlint
         run: |
