@@ -54,3 +54,14 @@ docker compose run --rm texlive bash
 ```tex
 \cite{example2023}
 ```
+
+# Textlintの実行方法
+```bash
+npx textlint .textlintrc 
+```
+
+## Textlintについて
+- [日本語の工学系論文のためのルールプリセット](https://github.com/kn1cht/textlint-rule-preset-ja-engineering-paper)を使用している
+- その中の[]"unify-kuten-and-touten"](https://github.com/kn1cht/textlint-rule-preset-ja-engineering-paper?tab=readme-ov-file#unify-kuten-and-touten)というルールを有効にしている
+  - これは、句読点と統一するルールになっている
+  - デフォルトで、「．」(全角ピリオド)「，」(全角カンマ)を使用している

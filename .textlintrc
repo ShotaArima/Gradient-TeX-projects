@@ -3,14 +3,8 @@
     "latex2e"
   ],
   "rules": {
-    "preset-jtf-style": {
-      "1.1.1.全角文字と半角文字の間": true,
-      "1.1.2.ピリオド(.)とカンマ(,)": {
-        "allowPeriodMarks": ["．"],
-        "allowCommaMarks": ["，"],
-        "preferPeriodMarks": ["．"],
-        "preferCommaMarks": ["，"]
+      "preset-ja-engineering-paper": {
+        "unify-kuten-and-touten": true
       }
-    }
-  }  
+  }
 }

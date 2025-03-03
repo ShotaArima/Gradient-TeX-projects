@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     latexmk \
     gzip \
     zip \
+    git \
     unzip \
     make \
     curl \
@@ -39,5 +40,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# textlint のインストール
-RUN npm install -g textlint textlint-rule-no-mix-dearu-desumasu textlint-rule-preset-jtf-style
+# Node.js パッケージのインストール
+ENV PATH=/work/node_modules/.bin:$PATH
+COPY package.json /work/
+COPY package-lock.json /work/
+RUN npm install
